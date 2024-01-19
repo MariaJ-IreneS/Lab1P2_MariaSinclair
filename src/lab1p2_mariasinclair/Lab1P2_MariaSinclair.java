@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Lab1P2_MariaSinclair {
 
@@ -42,28 +44,33 @@ public class Lab1P2_MariaSinclair {
     }//Fin del main.
 
     public static void Registrar() throws ParseException {
-        System.out.println("Ingrese su nombre (Nombre Apellido): ");
-        String nombre = leer.next();
-        leer.nextLine();
+    System.out.println("Ingrese su nombre (Nombre Apellido): ");
+    String nombre = leer.next();
+    leer.nextLine();
 
-        System.out.println("Ingrese su fecha de nacimiento (dd/MM/yyyy): ");
-        String fecha = leer.next();
+    System.out.println("Ingrese su fecha de nacimiento (dd/MM/yyyy): ");
+    String fecha = leer.next();
 
-        if (verificarEdad(fecha)) {
+    if (verificarEdad(fecha)) {
+        String correo;
+        do {
+            System.out.println("Ingrese su correo electrónico: ");
+            correo = leer.next();
+            if (!verificarCorreo(correo)) {
+                System.out.println("Correo electrónico no válido. Inténtelo de nuevo.");
+            } else if (existeCorreoConMismoDominio(correo)) {
+                System.out.println("Ya existe un correo con el mismo dominio. Inténtelo de nuevo.");
+            }
+        } while (!verificarCorreo(correo) || existeCorreoConMismoDominio(correo));
 
-            System.out.println("Ingrese su correo electronico: ");
-            String correo = leer.next();
+        System.out.println("Ingrese su contraseña: ");
+        String contraseña = leer.next();
 
-            System.out.println("Ingrese su contraseña: ");
-            String contraseña = leer.next();
-
-            Correos persona = new Correos(nombre, fecha, correo, contraseña);
-            lista.add(persona);
-
-        } else {
-            System.out.println("Lo siento, debes tener al menos 13 años para registrarte😭");
-            ;
-        }
+        Correos persona = new Correos(nombre, fecha, correo, contraseña);
+        lista.add(persona);
+    } else {
+        System.out.println("Lo siento, debes tener al menos 13 años para registrarte😭");
+    }
     }
 
     public static void FormatoFecha(String fecha) throws ParseException {
@@ -106,14 +113,45 @@ public class Lab1P2_MariaSinclair {
         Date fechaNacimiento = sdf.parse(fechaN);
         Date fechaActual = new Date();
 
-        // Calcular la diferencia en milisegundos, segundos, minutos, horas, días y años.
+        // Calcular la diferencia en milisegundos.
         long diferencia = fechaActual.getTime() - fechaNacimiento.getTime();
         long segundos = diferencia / 1000;
         long minutos = segundos / 60;
         long horas = minutos / 60;
         long dias = horas / 24;
-        long años = dias / 365;
 
-        return años + " años, " + (dias % 365) + " días";
+        // Convertir la diferencia total de días a años, meses y días.
+        long años = dias / 365;
+        long meses = (dias % 365) / 30; 
+        long diasRestantes = (dias % 365) % 30;
+
+        return años + " años, " + meses + " meses, " + diasRestantes + " días";
     }
+
+
+    public static boolean verificarCorreo(String email) {
+        String regex = "^[a-zA-Z0-9._%&$+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+    
+     public static boolean existeCorreoConMismoDominio(String correo) {
+        // Obtener el dominio del correo ingresado
+        String[] partesCorreo = correo.split("@");
+        String dominio = partesCorreo[1];
+
+        // Verificar si ya existe un correo con el mismo dominio en la lista
+        for (Correos persona : lista) {
+            String correoExistente = persona.getCorreo();
+            String[] partesCorreoExistente = correoExistente.split("@");
+            String dominioExistente = partesCorreoExistente[1];
+            if (dominioExistente.equalsIgnoreCase(dominio)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+     
 }
