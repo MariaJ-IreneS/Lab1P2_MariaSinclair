@@ -12,8 +12,34 @@ public class Lab1P2_MariaSinclair {
     static ArrayList<Correos> lista = new ArrayList<>();
 
     public static void main(String[] args) throws ParseException {
-        Registrar();
-    }
+        int caso = 0;
+        boolean repetir = true;
+        while (repetir) {
+            System.out.println("-------MENU-------");
+            System.out.println("1. Registrar: ");
+            System.out.println("2. Listar. ");
+            System.out.println("3.  ");
+            System.out.println("4. Salir");
+            System.out.print(" Elige una opcion: ");
+            caso = leer.nextInt();
+
+            switch (caso) {
+                case 1:
+                    Registrar();
+                    break;
+                case 2:
+                    Listar();
+                    break;
+                case 3:
+                    System.out.println("Hola 3");
+                    break;
+                default:
+                    System.out.println("Finalizo.");
+                    repetir = false;
+
+            }//Fin de los casos.
+        }//Fin del repetidor.
+    }//Fin del main.
 
     public static void Registrar() throws ParseException {
         System.out.println("Ingrese su nombre (Nombre Apellido): ");
@@ -23,20 +49,21 @@ public class Lab1P2_MariaSinclair {
         System.out.println("Ingrese su fecha de nacimiento (dd/MM/yyyy): ");
         String fecha = leer.next();
 
-        System.out.println("Ingrese su correo electronico: ");
-        String correo = leer.next();
-
-        System.out.println("Ingrese su contraseña: ");
-        String contraseña = leer.next();
-
-        Correos persona = new Correos(nombre, fecha, correo, contraseña);
-        
         if (verificarEdad(fecha)) {
-            System.out.println("Registro exitoso. ¡Bienvenido!");
+
+            System.out.println("Ingrese su correo electronico: ");
+            String correo = leer.next();
+
+            System.out.println("Ingrese su contraseña: ");
+            String contraseña = leer.next();
+
+            Correos persona = new Correos(nombre, fecha, correo, contraseña);
+            lista.add(persona);
+
         } else {
-            System.out.println("Lo siento, debes tener al menos 13 años para registrarte.");
+            System.out.println("Lo siento, debes tener al menos 13 años para registrarte😭");
+            ;
         }
-    
     }
 
     public static void FormatoFecha(String fecha) throws ParseException {
@@ -51,10 +78,24 @@ public class Lab1P2_MariaSinclair {
 
         Date fechaActual = new Date();
 
-        long diferenciaEnMillis = fechaActual.getTime() - fechaNacimiento.getTime();
+        //Calcular Milisegundo
+        long diferencia = fechaActual.getTime() - fechaNacimiento.getTime();
 
-        int edad = (int) (diferenciaEnMillis / (365.25 * 24 * 60 * 60 * 1000));
+        //Diferencia en años.
+        int edad = (int) (diferencia / (365.25 * 24 * 60 * 60 * 1000));
 
         return edad > 13;
     }
+
+    public static void Listar() {
+        System.out.println("Correos:");
+
+        for (int i = 0; i < lista.size(); i++) {
+            Correos persona = lista.get(i);
+            System.out.println("Posición: " + (i + 1));
+            System.out.println(persona.toString());
+            System.out.println("\n");
+        }
+    }
+
 }

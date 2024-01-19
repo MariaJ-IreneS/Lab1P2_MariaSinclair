@@ -17,6 +17,29 @@ public class Correos {
         this.correo = correo;
         this.contraseña = contraseña;
     }
-   
+
+    public String getNcompleto() {
+        return ncompleto;
+    }
+
+    public String getNacimiento() {
+        return nacimiento;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public String getContraseña() {
+        return contraseña;
+    }
+
+    @Override
+    public String toString() {
+        return "Nombre Completo: =" + ncompleto + "\nFecha de Nacimiento=" + nacimiento + "\n Corrreo Electronico:" + correo + "\nContraseña:" + contraseña + '}';
+    }
+  
+    
+    
       }
 
