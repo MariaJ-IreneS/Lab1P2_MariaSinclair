@@ -142,15 +142,15 @@ public class Lab1P2_MariaSinclair {
         String dominio = partesCorreo[1];
 
         // Verificar si ya existe un correo con el mismo dominio en la lista
-        for (Correos persona : lista) {
-            String correoExistente = persona.getCorreo();
-            String[] partesCorreoExistente = correoExistente.split("@");
-            String dominioExistente = partesCorreoExistente[1];
-            if (dominioExistente.equalsIgnoreCase(dominio)) {
-                return true;
-            }
+         for (int i = 0; i < lista.size(); i++) {
+        Correos persona = lista.get(i);
+        String correoExistente = persona.getCorreo();
+        String[] partesCorreoExistente = correoExistente.split("@");
+        String dominioExistente = partesCorreoExistente[1];
+        if (dominioExistente.equalsIgnoreCase(dominio)) {
+            return true;
         }
-
+         }
         return false;
     }
      
