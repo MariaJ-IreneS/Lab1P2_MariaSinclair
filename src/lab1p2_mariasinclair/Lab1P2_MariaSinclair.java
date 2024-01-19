@@ -44,33 +44,39 @@ public class Lab1P2_MariaSinclair {
     }//Fin del main.
 
     public static void Registrar() throws ParseException {
-    System.out.println("Ingrese su nombre (Nombre Apellido): ");
-    String nombre = leer.next();
-    leer.nextLine();
+        System.out.println("Ingrese su nombre (Nombre Apellido): ");
+        String nombre = leer.next();
+        leer.nextLine();
 
-    System.out.println("Ingrese su fecha de nacimiento (dd/MM/yyyy): ");
-    String fecha = leer.next();
+        System.out.println("Ingrese su fecha de nacimiento (dd/MM/yyyy): ");
+        String fecha = leer.next();
 
-    if (verificarEdad(fecha)) {
-        String correo;
-        do {
-            System.out.println("Ingrese su correo electrónico: ");
-            correo = leer.next();
-            if (!verificarCorreo(correo)) {
-                System.out.println("Correo electrónico no válido. Inténtelo de nuevo.");
-            } else if (existeCorreoConMismoDominio(correo)) {
-                System.out.println("Ya existe un correo con el mismo dominio. Inténtelo de nuevo.");
-            }
-        } while (!verificarCorreo(correo) || existeCorreoConMismoDominio(correo));
+        if (verificarEdad(fecha)) {
+            String correo;
+            do {
+                System.out.println("Ingrese su correo electrónico: ");
+                correo = leer.next();
+                if (!verificarCorreo(correo)) {
+                    System.out.println("Correo electrónico no válido. Inténtelo de nuevo.");
+                } else if (existeCorreoConMismoDominio(correo)) {
+                    System.out.println("Ya existe un correo con el mismo dominio. Inténtelo de nuevo.");
+                }
+            } while (!verificarCorreo(correo) || existeCorreoConMismoDominio(correo));
 
-        System.out.println("Ingrese su contraseña: ");
-        String contraseña = leer.next();
+            String contraseña;
+            do {
+                System.out.println("Ingrese su contraseña: ");
+                contraseña = leer.next();
+                if (!contraseña(contraseña)) {
+                    System.out.println("Contraseña no válida. Debe tener al menos 8 caracteres, incluir una letra mayúscula, una letra minúscula, un número y un símbolo.");
+                }
+            } while (!contraseña(contraseña));
 
-        Correos persona = new Correos(nombre, fecha, correo, contraseña);
-        lista.add(persona);
-    } else {
-        System.out.println("Lo siento, debes tener al menos 13 años para registrarte😭");
-    }
+            Correos persona = new Correos(nombre, fecha, correo, contraseña);
+            lista.add(persona);
+        } else {
+            System.out.println("Lo siento, debes tener al menos 13 años para registrarte😭");
+        }
     }
 
     public static void FormatoFecha(String fecha) throws ParseException {
@@ -122,12 +128,11 @@ public class Lab1P2_MariaSinclair {
 
         // Convertir la diferencia total de días a años, meses y días.
         long años = dias / 365;
-        long meses = (dias % 365) / 30; 
+        long meses = (dias % 365) / 30;
         long diasRestantes = (dias % 365) % 30;
 
         return años + " años, " + meses + " meses, " + diasRestantes + " días";
     }
-
 
     public static boolean verificarCorreo(String email) {
         String regex = "^[a-zA-Z0-9._%&$+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
@@ -135,23 +140,30 @@ public class Lab1P2_MariaSinclair {
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
     }
-    
-     public static boolean existeCorreoConMismoDominio(String correo) {
+
+    public static boolean existeCorreoConMismoDominio(String correo) {
         // Obtener el dominio del correo ingresado
         String[] partesCorreo = correo.split("@");
         String dominio = partesCorreo[1];
 
-        // Verificar si ya existe un correo con el mismo dominio en la lista
-         for (int i = 0; i < lista.size(); i++) {
-        Correos persona = lista.get(i);
-        String correoExistente = persona.getCorreo();
-        String[] partesCorreoExistente = correoExistente.split("@");
-        String dominioExistente = partesCorreoExistente[1];
-        if (dominioExistente.equalsIgnoreCase(dominio)) {
-            return true;
+        // Verificar si ya existe un correo igual.
+        for (int i = 0; i < lista.size(); i++) {
+            Correos persona = lista.get(i);
+            String correoExistente = persona.getCorreo();
+            String[] partesCorreoExistente = correoExistente.split("@");
+            String dominioExistente = partesCorreoExistente[1];
+            if (dominioExistente.equalsIgnoreCase(dominio)) {
+                return true;
+            }
         }
-         }
         return false;
     }
-     
+
+    public static boolean contraseña(String contraseña) {
+        String regex = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!\\?<>$%]).{8,}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(contraseña);
+        return matcher.matches();
+    }
+
 }
