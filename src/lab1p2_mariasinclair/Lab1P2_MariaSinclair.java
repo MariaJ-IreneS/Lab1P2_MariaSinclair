@@ -82,20 +82,38 @@ public class Lab1P2_MariaSinclair {
         long diferencia = fechaActual.getTime() - fechaNacimiento.getTime();
 
         //Diferencia en años.
-        int edad = (int) (diferencia / (365.25 * 24 * 60 * 60 * 1000));
+        int edad = (int) (diferencia / (365 * 24 * 60 * 60 * 1000));
 
         return edad > 13;
     }
 
-    public static void Listar() {
+    public static void Listar() throws ParseException {
         System.out.println("Correos:");
 
         for (int i = 0; i < lista.size(); i++) {
             Correos persona = lista.get(i);
             System.out.println("Posición: " + (i + 1));
-            System.out.println(persona.toString());
+            System.out.println("Nombre: " + persona.getNcompleto());
+            System.out.println("Edad: " + calcularEdad(persona.getNacimiento())); // Corregido aquí
+            System.out.println("Correo: " + persona.getCorreo());
+            System.out.println("Contraseña: " + persona.getContraseña());
             System.out.println("\n");
         }
     }
 
+    public static String calcularEdad(String fechaN) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Date fechaNacimiento = sdf.parse(fechaN);
+        Date fechaActual = new Date();
+
+        // Calcular la diferencia en milisegundos, segundos, minutos, horas, días y años.
+        long diferencia = fechaActual.getTime() - fechaNacimiento.getTime();
+        long segundos = diferencia / 1000;
+        long minutos = segundos / 60;
+        long horas = minutos / 60;
+        long dias = horas / 24;
+        long años = dias / 365;
+
+        return años + " años, " + (dias % 365) + " días";
+    }
 }
