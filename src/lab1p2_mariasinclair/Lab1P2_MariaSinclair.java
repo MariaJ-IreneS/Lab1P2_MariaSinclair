@@ -33,10 +33,10 @@ public class Lab1P2_MariaSinclair {
                     Listar();
                     break;
                 case 3:
-                    System.out.println("Hola 3");
+                    ListarPorDominio();
                     break;
                 default:
-                    System.out.println("Finalizo.");
+                    System.out.println("Finalizo su programa.");
                     repetir = false;
 
             }//Fin de los casos.
@@ -164,6 +164,23 @@ public class Lab1P2_MariaSinclair {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(contraseña);
         return matcher.matches();
+    }
+
+    public static void ListarPorDominio() throws ParseException {
+        System.out.print("Ingrese el dominio a filtrar: ");
+        String dominio = leer.next();
+
+        System.out.println("Correos del dominio @" + dominio + ":");
+
+        for (Correos persona : lista) {
+            if (persona.getCorreo().toLowerCase().endsWith("@" + dominio.toLowerCase())) {
+                System.out.println("Nombre: " + persona.getNcompleto());
+                System.out.println("Edad: " + calcularEdad(persona.getNacimiento()));
+                System.out.println("Correo: " + persona.getCorreo());
+                System.out.println("Contraseña: " + persona.getContraseña());
+                System.out.println();
+            }
+        }
     }
 
 }
